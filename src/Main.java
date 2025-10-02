@@ -1,13 +1,35 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+// Target (новый интерфейс, который мы хотим использовать)
+interface Charger {
+    void charge();
+}
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
+// Adaptee (существующий несовместимый класс)
+class OldSocket {
+    public int getVoltage() {
+        return 220; // розетка выдаёт 220В
+    }
+}
+
+// Adapter (делает 220В → 5В)
+class SocketAdapter implements Charger {
+    private OldSocket socket;
+
+    public SocketAdapter(OldSocket socket) {
+        this.socket = socket;
+    }
+
+    @Override
+    public void charge() {
+        int volts = socket.getVoltage();
+        int converted = 5; // представим, что преобразовали
+        System.out.println("Адаптер преобразовал " + volts + "V в " + converted + "V. Заряжаем телефон!");
+    }
+}
+
+// Клиентский код
+public class Main {
+    public static void main(String[] args) {
+        Charger charger = new SocketAdapter(new OldSocket());
+        charger.charge();
     }
 }
